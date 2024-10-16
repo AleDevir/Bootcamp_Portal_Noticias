@@ -1,7 +1,7 @@
 '''
 MODELS app_noticias
 '''
-
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -27,18 +27,24 @@ class Noticia(models.Model):
     criada_em = models.DateTimeField('Criada em', help_text='dd/mm/yyyy hh:MM', auto_now_add=True)
     atualizada_em = models.DateTimeField('Atualizada', help_text='dd/mm/yyyy hh:MM', auto_now_add=True)
     imagem = models.ImageField(upload_to='', blank=True)
-    autor = models.ForeignKey(User, on_delete=models.RESTRICT)
-    categoria = models.ForeignKey(Categoria, on_delete=models.RESTRICT)
-    publicada_em = models.DateTimeField('Publicada em', help_text='dd/mm/yyyy hh:MM', null=True)
-    publicada = models.BooleanField('Publicada', default=False )
+    autor = models.ForeignKey(User, on_delete=models.RESTRICT, editable=False)
+    categoria = models.ManyToManyField(Categoria)
+    publicada_em = models.DateTimeField('Publicada em', help_text='dd/mm/yyyy hh:MM', null=True, editable=False)
+    publicada = models.BooleanField('Publicada', default=False)
+
+    def save(self, *args, **kwargs):
+        if self.publicada and not self.publicada_em:
+            self.publicada_em = datetime.now()
+        elif not self.publicada and self.publicada_em:
+            self.publicada_em = None
+        return super().save(*args, **kwargs)
 
     class Meta:
         '''
         Metamodelo
         '''
         db_table = 'noticias'
-       
-
+    
     def __str__(self):
         '''
         str
@@ -46,4 +52,4 @@ class Noticia(models.Model):
         if self.publicada:
             return  f"Título: {str(self.titulo)} - PUBLICADA"
         return f"Título: {str(self.titulo)}"
-        
+
