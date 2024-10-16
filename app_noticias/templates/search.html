@@ -1,0 +1,31 @@
+{% load static %}
+{% load django_bootstrap5 %}
+{% static 'icones/procurar.png' as procurar_url %}
+<div>
+    <nav class="navbar navbar-expand-lg" style="background-color:#223140;">
+        <div class="container-fluid  ">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse px-2 " id="navbarSupportedContent">
+
+                <form class="d-flex " role="search">
+                    <select class="form-select" style="margin-right: 5px;" name="categoria"
+                        aria-label="Default select example">
+                        <option selected value="">Todas</option>
+                        <option selected value="">....</option>
+                        <option selected value="">....</option>
+                        <option selected value="">....</option>
+                    </select>
+                    <input class="form-control me-2 " type="search" name="titulo" placeholder="Pesquisar Título"
+                        aria-label="Search" value="">
+                    <button class="btn btn-outline-info btn-sm" type="submit"><img src="{{ procurar_url}}" width="22"
+                            height="22"></button>
+
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
