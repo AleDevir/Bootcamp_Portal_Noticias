@@ -6,12 +6,14 @@
 
 <div class="m-4 justify-content-center  align-items-center w-50 ">
     <a href="javascript:history.back()" class="mb-3   text-decoration-none btn btn-outline-info">Voltar</a>
-    <img src="" class="rounded w-100" alt="">
-    <p class="text-capitalize text-justify text-secondary">Em Categoria(s)</p>
-    <p class="text-secondary">Publicada em </p>
-    <p class="text-secondary">Ultima atualização por </p>
-    <p>Título</p>
-    <p>Conteúdo</p>
+    <img src="/media/{{noticia.imagem}}" class="rounded w-100" alt="{{uma_noticia.titulo}}">
+    <p class="text-capitalize text-justify text-secondary">Em {{noticia.categoria}}</p>
+    {% if noticia.publicada %}
+    <p class="text-secondary">Publicada em {{ noticia.publicada_em }}</p>
+    {% endif %}
+    <p class="text-secondary">Ultima atualização {{noticia.atualizada_em}} por {{noticia.autor}}</p>
+    <p>{{noticia.titulo}}</p>
+    <p>{{noticia.conteudo}}</p>
 </div>
 
 {% endblock %}
