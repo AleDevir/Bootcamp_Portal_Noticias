@@ -1,0 +1,9 @@
+Django
+django-test
+django-bootstrap5
+pylint-django
+mypy
+mypy-extensions
+pylint
+pytest
+pillow
