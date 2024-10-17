@@ -55,7 +55,7 @@
                 </ul>
             </div>
             {% else %}
-            <a href="" class="px-3 ms-auto text-info text-decoration-none">Sign</a>
+            <a href="{% url 'registrar-usuario' %}" class="px-3 ms-auto text-info text-decoration-none">Sign</a>
             <a href="{% url 'login' %}" class="px-3 text-info text-decoration-none">Login</a>
 
             {% endif %}
