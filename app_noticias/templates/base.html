@@ -2,6 +2,8 @@
 {% load django_bootstrap5 %}
 {% static 'icones/user_edit.png' as editar_url %}
 {% static 'icones/senha.png' as senha_url %}
+{% static 'icones/news.png' as news_url %}
+{% static 'icones/editor.png' as editor_url %}
 {% static 'icones/logout.png' as logout_url %}
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +36,15 @@
                     <li class="dropdown-item d-flex "><img src="{{ senha_url}}" width="20" height="20" class="mt-1" />
                         <button class="dropdown-item text-info" type="button">Trocar senha</button>
                     </li>
+
+                    <li class="dropdown-item d-flex "><img src="{{ news_url}}" width="20" height="20" class="mt-1" />
+                        <a href="#" class="dropdown-item text-info">Minhas noticias</a>
+                    </li>
+
+                    <li class="dropdown-item d-flex "><img src="{{editor_url}}" width="20" height="20" class="mt-1" />
+                        <a href="#" class="dropdown-item text-info" type="button">Publicar</a>
+                    </li>
+
                     <li class="dropdown-item d-flex ">
                         <img src="{{ logout_url}}" width="20" height="20" class="mt-1" />
                         <form action="{% url 'logout' %}" method="post">
