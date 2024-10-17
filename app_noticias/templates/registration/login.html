@@ -26,21 +26,21 @@
             {% csrf_token %}
             {% bootstrap_form form %}
 
-            <button type="submit" value="login" class="w-100 btn btn-outline-info">Login</button>
+            <button type="submit" value="login" class="w-100 btn btn-outline-info mb-3 ">Login</button>
 
             <input type="hidden" name="next" value="{{ next }}">
 
         </form>
-        <div class=" d-flex col justify-content-center my-4">
-            <p class="mb-2">Não possui cadastro?
-                <a href="" class="text-info text-decoration-none">clique aqui</a>
-            </p>
-        </div>
+
         <div class="d-flex col  justify-content-center">
             <a href="{% url 'home' %}" class="mb-3  w-100 text-decoration-none btn btn-outline-info">
                 &laquo; Voltar </a>
         </div>
-
+        <div class=" d-flex col justify-content-center my-4">
+            <p class="mb-2">Não possui cadastro?
+                <a href="{% url 'registrar-usuario' %}" class="text-info text-decoration-none">clique aqui</a>
+            </p>
+        </div>
 
     </div>
 </div>

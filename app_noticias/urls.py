@@ -7,6 +7,7 @@ from .views import (
     HomeListView,
     NoticiaDetailView,
     CriarUasuarioView,
+    TrocarSenhaView,
     UsuarioUpdateView,
 )
 
@@ -17,4 +18,5 @@ urlpatterns = [
     path("<int:pk>/", NoticiaDetailView.as_view(), name="noticia-detail"),
     path("register/", CriarUasuarioView.as_view(), name='registrar-usuario'),
     path('register/edit/<int:pk>', UsuarioUpdateView.as_view(), name='atualizar-usuario'),
+    path('register/edit/password/<int:pk>', TrocarSenhaView.as_view(), name='atualizar-senha'),
 ]
