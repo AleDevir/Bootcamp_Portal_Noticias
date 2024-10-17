@@ -4,7 +4,7 @@
 {% for uma_noticia in object_list %}
 
 <div class="card mb-3 border-0 " style="max-width: 540px; position: relative; padding-top: 180px;">
-    <a href="" class=" text-decoration-none border-bottom">
+    <a href="{% url 'noticia-detail' uma_noticia.id %}" class=" text-decoration-none border-bottom">
 
         <div class="row g-0">
             <div class="col-md-4 ratio ratio-16x9" style="object-fit: contain;">
