@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+
+
+<div class="d-flex col-auto  justify-content-center mt-5 p-3">
+
+  <div class=" shadow-lg p-5 mb-5  rounded ">
+    <p class="text-info fs-3">Ediatr seus dados</p>
+    <form method="post" action="{% url 'atualizar-usuario' user.id %}">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+
+      <button type="submit" class="w-100 btn btn-outline-info mb-3">Salvar</button>
+
+
+
+    </form>
+
+    <div class="d-flex col  justify-content-center">
+      <a href="{% url 'home' %}" class="mb-3  w-100 text-decoration-none btn btn-outline-info">
+        &laquo; Voltar </a>
+    </div>
+
+
+  </div>
+</div>
+{% endblock %}

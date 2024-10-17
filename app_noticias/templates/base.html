@@ -31,10 +31,12 @@
                 </button>
                 <ul class="dropdown-menu  ">
                     <li class="dropdown-item d-flex"><img src="{{ editar_url}}" width="22" height="22" class="mt-1" />
-                        <button class="dropdown-item text-info" type="button">Editar dados</button>
+                        <a href="{% url 'atualizar-usuario' user.id %}" class="dropdown-item text-info"
+                            type="button">Editar dados</a>
                     </li>
                     <li class="dropdown-item d-flex "><img src="{{ senha_url}}" width="20" height="20" class="mt-1" />
-                        <button class="dropdown-item text-info" type="button">Trocar senha</button>
+                        <a href="{% url 'atualizar-senha' user.id %}" class="dropdown-item text-info"
+                            type="button">Trocar senha</a>
                     </li>
 
                     <li class="dropdown-item d-flex "><img src="{{ news_url}}" width="20" height="20" class="mt-1" />
@@ -55,7 +57,7 @@
                 </ul>
             </div>
             {% else %}
-            <a href="" class="px-3 ms-auto text-info text-decoration-none">Sign</a>
+            <a href="{% url 'registrar-usuario' %}" class="px-3 ms-auto text-info text-decoration-none">Sign</a>
             <a href="{% url 'login' %}" class="px-3 text-info text-decoration-none">Login</a>
 
             {% endif %}
