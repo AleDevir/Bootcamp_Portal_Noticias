@@ -18,3 +18,14 @@ Comando para instalação dos pacotes:
 pip install -r requirements.txt 
 
 ```
+
+Criar Ambiente Virtual em Windows:
+```
+python -m venv .venv
+```
+
+Comando para ativar o ambiente virtual no Windows:
+```
+.\.venv\Scripts\activate
+
+```
