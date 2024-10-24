@@ -112,14 +112,15 @@ class ExcluirNoticiaView(LoginRequiredMixin, DeleteView):
         return reverse('home')
     
 class PublicarNoticiaView(LoginRequiredMixin, View):
-    def post(self, pk):
+    def post(self, request, pk):
         noticia = get_object_or_404(Noticia, pk=pk)
         noticia.publicada = True
         noticia.save()
         return redirect('home')
 
+
 class DespublicarNoticiaView(LoginRequiredMixin, View):
-    def post(self, pk):
+    def post(self, request, pk):
         noticia = get_object_or_404(Noticia, pk=pk)
         noticia.publicada = False
         noticia.save()
