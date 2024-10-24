@@ -6,7 +6,7 @@
 <div class="d-flex col-auto  justify-content-center mt-5 p-3">
 
   <div class=" shadow-lg p-5 mb-5  rounded ">
-    <p class="text-info fs-3">Ediatr seus dados</p>
+    <p class="text-info fs-3">Editar seus dados</p>
     <form method="post" action="{% url 'atualizar-usuario' user.id %}">
       {% csrf_token %}
       {% bootstrap_form form %}

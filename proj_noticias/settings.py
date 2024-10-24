@@ -64,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app_noticias.context_processors.user_permissions'
             ],
         },
     },
@@ -133,3 +134,5 @@ MEDIA_ROOT = BASE_DIR.joinpath('media')
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+#AUTH_USER_MODEL = 'app_noticias.CustomUser'

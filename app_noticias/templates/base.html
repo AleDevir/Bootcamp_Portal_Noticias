@@ -23,7 +23,7 @@
             <a href="{% url 'home' %}">
                 <div class="text-ligth m-3 p-2 rounded-circle btn btn-outline-info">PN</div>
             </a>
-            {% if user.is_authenticated %}
+            {% if request.user.is_authenticated %}
             <div class="dropdown ms-auto px-4">
                 <button class="btn btn-outline-info dropdown-toggle  " type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -38,15 +38,19 @@
                         <a href="{% url 'atualizar-senha' user.id %}" class="dropdown-item text-info"
                             type="button">Trocar senha</a>
                     </li>
-
-                    <li class="dropdown-item d-flex "><img src="{{ news_url}}" width="20" height="20" class="mt-1" />
-                        <a href="#" class="dropdown-item text-info">Minhas noticias</a>
+                    
+                    {% if user.is_authenticated and is_author %}
+                    <li class="dropdown-item d-flex "><img src="{{ news_url }}" width="20" height="20" class="mt-1" />
+                        <a href="{% url 'noticias' user.id %}" class="dropdown-item text-info">Minhas noticias</a>
                     </li>
+                    {% endif %}
 
-                    <li class="dropdown-item d-flex "><img src="{{editor_url}}" width="20" height="20" class="mt-1" />
-                        <a href="#" class="dropdown-item text-info" type="button">Publicar</a>
+                    {% if user.is_authenticated and is_editor %}
+                    <li class="dropdown-item d-flex "><img src="{{ editor_url }}" width="20" height="20" class="mt-1" />
+                        <a href="{% url 'noticias' user.id%}" class="dropdown-item text-info" type="button">Publicar</a>
                     </li>
-
+                    {% endif %}
+                    
                     <li class="dropdown-item d-flex ">
                         <img src="{{ logout_url}}" width="20" height="20" class="mt-1" />
                         <form action="{% url 'logout' %}" method="post">
