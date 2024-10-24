@@ -26,12 +26,12 @@ class HomeListView(ListView):
 
 class NoticiaDetailView(DetailView):
     '''
-    Listar as nóticias na página Home
+    Detalhe da Notícia
     '''
     model = Noticia
     template_name = 'noticia.html'
 
-class CriarUasuarioView(CreateView):
+class CriarUsuarioView(CreateView):
     '''
     Cria um novo usuário
     '''
