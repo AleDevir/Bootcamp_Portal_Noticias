@@ -67,18 +67,20 @@ class NoticiasView(LoginRequiredMixin, ListView):
     template_name = 'noticias_table.html'
     context_object_name = 'noticias'
 
-#"""user.groups.filter(name='Editores').exists"""
+    def get_queryset(self):
+        user = self.request.user
+        
+        if user.groups.filter(name='Editores').exists():
+            return Noticia.objects.all()
+        
+        elif user.is_authenticated:
+            noticias_autor = Noticia.objects.filter(autor=user)
+            noticias_publicadas = Noticia.objects.filter(publicada=True).exclude(autor=user)
+            return noticias_autor | noticias_publicadas
+        return Noticia.objects.filter(publicada=True)
 
     def get_success_url(self):
         return reverse('home')
-    
-    def get_queryset(self):
-        user = self.request.user.groups.filter
-        if user(name='Editores').exists():
-            return Noticia.objects.all()
-        elif user(name='Autores').exists():
-            return Noticia.objects.filter()
-        return Noticia.objects.none()
     
 class CadastrarNoticiaView(LoginRequiredMixin, CreateView):
     #Cadastra a notícia
@@ -101,13 +103,13 @@ class EditarNoticiaView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('home')
-    
+     
 class ExcluirNoticiaView(LoginRequiredMixin, DeleteView):
     #Exclui a notícia
     model = Noticia
     template_name = 'noticia_confirm_delete.html'
     context_object_name = 'noticia'
-
+    
     def get_success_url(self):
         return reverse('home')
     

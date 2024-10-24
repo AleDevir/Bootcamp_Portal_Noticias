@@ -85,7 +85,7 @@
                             </a>
                             {% endif %}
 
-                            {% if is_author and not noticia.publicada %}
+                            {% if request.user == noticia.autor and not noticia.publicada %}
                             <a href="{% url 'editar_noticia' noticia.id %}">
                                 <img src="/static/icones/edit.png" width="22" height="22" class="m-1" alt="Editar" />
                             </a>
