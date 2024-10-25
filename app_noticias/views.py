@@ -5,14 +5,14 @@ from django.views.generic import  DetailView, ListView, DeleteView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.urls import reverse
 from .models import  Noticia
 from .forms import RegistrarUsuarioForm, NoticiaForm
 import pdb
-from .models import Categoria
+
 
 
 class HomeListView(ListView):
@@ -62,7 +62,7 @@ class TrocarSenhaView(PasswordChangeView):
     def get_success_url(self):
         return reverse('home')
     
-class NoticiasView(LoginRequiredMixin, ListView):
+class NoticiasView(PermissionRequiredMixin, ListView):
     #Visualiza a área administrativa de notícias
     model = Noticia
     template_name = 'noticias_table.html'
@@ -83,7 +83,7 @@ class NoticiasView(LoginRequiredMixin, ListView):
     def get_success_url(self):
         return reverse('home')
     
-class CadastrarNoticiaView(LoginRequiredMixin, CreateView):
+class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     #Cadastra a notícia
     model = Noticia
     form_class = NoticiaForm
@@ -96,7 +96,7 @@ class CadastrarNoticiaView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('home')
     
-class EditarNoticiaView(LoginRequiredMixin, UpdateView):
+class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     #Edita a notícia
     model = Noticia
     form_class = NoticiaForm
@@ -105,7 +105,7 @@ class EditarNoticiaView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('home')
      
-class ExcluirNoticiaView(LoginRequiredMixin, DeleteView):
+class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     #Exclui a notícia
     model = Noticia
     template_name = 'noticia_confirm_delete.html'
@@ -128,17 +128,5 @@ class DespublicarNoticiaView(LoginRequiredMixin, View):
         noticia.publicada = False
         noticia.save()
         return redirect('home')
-
-def SearchView(request):
-    query = request.GET.get('titulo', '')
-    categoria = request.GET.get('categoria', '')
-    if query:
-        resultados = Noticia.objects.filter(titulo__icontains=query)
-    if categoria:
-            resultados = resultados.filter(categoria=categoria)
-    else:
-        resultados = Noticia.objects.all()
-    return render(request, 'search.html', {'resultados': resultados, 'query': query, 'categoria': categoria})
-
 
 
