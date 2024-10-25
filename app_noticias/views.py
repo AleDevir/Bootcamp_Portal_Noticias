@@ -21,8 +21,6 @@ from .models import  Noticia
 from .forms import RegistrarUsuarioForm, NoticiaForm
 
 
-
-
 class HomeListView(ListView):
     '''
     Listar as nóticias na página Home
@@ -39,6 +37,17 @@ class NoticiaDetailView(DetailView):
     '''
     model = Noticia
     template_name = 'noticia.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        eh_editor: bool = self.request.user.has_perm('app_noticias.pode_publicar')
+        eh_autor: bool = self.request.user.has_perm('app_noticias.add_noticia')
+        eh_autor_da_noticia: bool = eh_autor and self.object.autor == request.user
+        pode_ver_noticia_nao_publicada: bool = eh_editor or eh_autor_da_noticia
+        if not self.object.publicada and not pode_ver_noticia_nao_publicada:
+            raise PermissionDenied('Permissão para ver a notícia negada! Está notícia não foi publicada.')
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 class CriarUsuarioView(CreateView):
     '''
