@@ -12,6 +12,7 @@ from django.urls import reverse
 from .models import  Noticia
 from .forms import RegistrarUsuarioForm, NoticiaForm
 import pdb
+from .models import Categoria
 
 
 class HomeListView(ListView):
@@ -127,4 +128,17 @@ class DespublicarNoticiaView(LoginRequiredMixin, View):
         noticia.publicada = False
         noticia.save()
         return redirect('home')
+
+def SearchView(request):
+    query = request.GET.get('titulo', '')
+    categoria = request.GET.get('categoria', '')
+    if query:
+        resultados = Noticia.objects.filter(titulo__icontains=query)
+    if categoria:
+            resultados = resultados.filter(categoria=categoria)
+    else:
+        resultados = Noticia.objects.all()
+    return render(request, 'search.html', {'resultados': resultados, 'query': query, 'categoria': categoria})
+
+
 

@@ -15,9 +15,10 @@ from .views import (
     ExcluirNoticiaView,
     PublicarNoticiaView,
     DespublicarNoticiaView,
+    SearchView,
 )
 
-APP_NAME = "app_noticia"
+app_name = "app_noticia"
 
 urlpatterns = [
     path("", HomeListView.as_view(), name='home'),
@@ -31,4 +32,5 @@ urlpatterns = [
     path('excluir-noticia/<int:pk>/', ExcluirNoticiaView.as_view(), name='excluir_noticia'),
     path('publicar-noticia/<int:pk>', PublicarNoticiaView.as_view(), name='publicar_noticia'),
     path('despublicar-noticia/<int:pk>/', DespublicarNoticiaView.as_view(), name='despublicar_noticia'),
+    path('search/', SearchView, name='SearchView'),
 ]
