@@ -64,6 +64,7 @@ class TrocarSenhaView(PasswordChangeView):
     
 class NoticiasView(PermissionRequiredMixin, ListView):
     #Visualiza a área administrativa de notícias
+    permission_required = "app_noticias.view_noticia"
     model = Noticia
     template_name = 'noticias_table.html'
     context_object_name = 'noticias'
@@ -85,6 +86,7 @@ class NoticiasView(PermissionRequiredMixin, ListView):
     
 class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     #Cadastra a notícia
+    permission_required = "app_noticias.add_noticia"
     model = Noticia
     form_class = NoticiaForm
     template_name = 'noticia_cadastro.html'
@@ -98,6 +100,7 @@ class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     
 class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     #Edita a notícia
+    permission_required = "app_noticias.change_noticia"
     model = Noticia
     form_class = NoticiaForm
     template_name = 'noticia_cadastro.html'
@@ -107,6 +110,7 @@ class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
      
 class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     #Exclui a notícia
+    permission_required = "app_noticias.delete_noticia"
     model = Noticia
     template_name = 'noticia_confirm_delete.html'
     context_object_name = 'noticia'
