@@ -148,21 +148,6 @@ class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     
     def get_success_url(self):
         return reverse('noticias')
-    
-# class PublicarNoticiaView(LoginRequiredMixin, View):
-#     def post(self, request, pk):
-#         noticia = get_object_or_404(Noticia, pk=pk)
-#         noticia.publicada = True
-#         noticia.save()
-#         return redirect('home')
-
-
-# class DespublicarNoticiaView(LoginRequiredMixin, View):
-#     def post(self, request, pk):
-#         noticia = get_object_or_404(Noticia, pk=pk)
-#         noticia.publicada = False
-#         noticia.save()
-#         return redirect('home')
 
 @login_required(login_url="/accounts/login/")
 @permission_required("app_noticias.pode_publicar")
