@@ -1,6 +1,8 @@
 '''
 Módulos views de cadastros
 '''
+from datetime import datetime
+from django.core.exceptions import PermissionDenied
 from django.views.generic import  DetailView, ListView, DeleteView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.forms import PasswordChangeForm
@@ -8,10 +10,14 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.forms import BaseModelForm
 from django.urls import reverse
+from django.shortcuts import (
+    HttpResponse,
+)
 from .models import  Noticia
 from .forms import RegistrarUsuarioForm, NoticiaForm
-import pdb
+
 
 
 
@@ -76,7 +82,6 @@ class NoticiasView(PermissionRequiredMixin, ListView):
             return Noticia.objects.all()       
         return Noticia.objects.filter(autor=self.request.user)
         
-
     def get_success_url(self):
         return reverse('home')
     
@@ -100,6 +105,15 @@ class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     model = Noticia
     form_class = NoticiaForm
     template_name = 'noticia_cadastro.html'
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse: 
+        eh_editor: bool = self.request.user.groups.filter(name='Editores').exists()
+        if self.object.publicada and not eh_editor:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não possui permissão necessária.')
+        if not eh_editor and self.object.autor != self.request.user:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não é o autor da notícia.')
+        form.instance.atualizada_em = datetime.now()
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('home')
