@@ -2,7 +2,7 @@
 URLs Aplicação
 '''
 from django.urls import path
-
+from . import views
 from .views import (
     HomeListView,
     NoticiaDetailView,
@@ -12,13 +12,10 @@ from .views import (
     NoticiasView,
     CadastrarNoticiaView, 
     EditarNoticiaView,
-    ExcluirNoticiaView,
-    PublicarNoticiaView,
-    DespublicarNoticiaView,
-    SearchView,
+    ExcluirNoticiaView,   
 )
 
-app_name = "app_noticia"
+APP_NAME = "app_noticia"
 
 urlpatterns = [
     path("", HomeListView.as_view(), name='home'),
@@ -26,11 +23,10 @@ urlpatterns = [
     path("register/", CriarUsuarioView.as_view(), name='registrar-usuario'),
     path('register/edit/<int:pk>', UsuarioUpdateView.as_view(), name='atualizar-usuario'),
     path('register/edit/password/<int:pk>', TrocarSenhaView.as_view(), name='atualizar-senha'),
-    path('noticias/<int:pk>', NoticiasView.as_view(), name='noticias'),
+    path('noticias/', NoticiasView.as_view(), name='noticias'),
     path('cadastrar-noticia/', CadastrarNoticiaView.as_view(), name='cadastrar_noticia'),
     path('cadastrar-noticia/<int:pk>/', EditarNoticiaView.as_view(), name='editar_noticia'),
     path('excluir-noticia/<int:pk>/', ExcluirNoticiaView.as_view(), name='excluir_noticia'),
-    path('publicar-noticia/<int:pk>', PublicarNoticiaView.as_view(), name='publicar_noticia'),
-    path('despublicar-noticia/<int:pk>/', DespublicarNoticiaView.as_view(), name='despublicar_noticia'),
-    path('search/', SearchView, name='SearchView'),
+    path('noticias/publicar/<int:noticia_id>/<int:publicado>', views.publicar_noticia, name='publicar-noticia'),
+
 ]

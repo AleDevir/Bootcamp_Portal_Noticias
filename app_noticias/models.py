@@ -44,6 +44,9 @@ class Noticia(models.Model):
         Metamodelo
         '''
         db_table = 'noticias'
+        permissions = [
+            ("pode_publicar", "Permissão atribuida à Editores para a publicação da Notícia"),
+        ]
     
     def __str__(self):
         '''

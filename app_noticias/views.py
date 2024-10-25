@@ -1,18 +1,26 @@
 '''
 Módulos views de cadastros
 '''
+from datetime import datetime
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import  DetailView, ListView, DeleteView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.forms import BaseModelForm
 from django.urls import reverse
+from django.shortcuts import (
+    HttpResponse,
+    HttpResponseRedirect,
+)
 from .models import  Noticia
 from .forms import RegistrarUsuarioForm, NoticiaForm
-import pdb
-from .models import Categoria
+
+
 
 
 class HomeListView(ListView):
@@ -62,8 +70,9 @@ class TrocarSenhaView(PasswordChangeView):
     def get_success_url(self):
         return reverse('home')
     
-class NoticiasView(LoginRequiredMixin, ListView):
+class NoticiasView(PermissionRequiredMixin, ListView):
     #Visualiza a área administrativa de notícias
+    permission_required = "app_noticias.view_noticia"
     model = Noticia
     template_name = 'noticias_table.html'
     context_object_name = 'noticias'
@@ -72,19 +81,15 @@ class NoticiasView(LoginRequiredMixin, ListView):
         user = self.request.user
         
         if user.groups.filter(name='Editores').exists():
-            return Noticia.objects.all()
+            return Noticia.objects.all()       
+        return Noticia.objects.filter(autor=self.request.user)
         
-        elif user.is_authenticated:
-            noticias_autor = Noticia.objects.filter(autor=user)
-            noticias_publicadas = Noticia.objects.filter(publicada=True).exclude(autor=user)
-            return noticias_autor | noticias_publicadas
-        return Noticia.objects.filter(publicada=True)
-
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
     
-class CadastrarNoticiaView(LoginRequiredMixin, CreateView):
+class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     #Cadastra a notícia
+    permission_required = "app_noticias.add_noticia"
     model = Noticia
     form_class = NoticiaForm
     template_name = 'noticia_cadastro.html'
@@ -94,51 +99,68 @@ class CadastrarNoticiaView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
     
-class EditarNoticiaView(LoginRequiredMixin, UpdateView):
+class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     #Edita a notícia
+    permission_required = "app_noticias.change_noticia"
     model = Noticia
     form_class = NoticiaForm
     template_name = 'noticia_cadastro.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        eh_editor: bool = self.request.user.groups.filter(name='Editores').exists()
+        if self.object.publicada and not eh_editor:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não possui permissão necessária.')
+        if not eh_editor and self.object.autor != self.request.user:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não é o autor da notícia.')
+        return super().get(request, *args, **kwargs)
+
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse: 
+        eh_editor: bool = self.request.user.groups.filter(name='Editores').exists()
+        if self.object.publicada and not eh_editor:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não possui permissão necessária.')
+        if not eh_editor and self.object.autor != self.request.user:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não é o autor da notícia.')
+        form.instance.atualizada_em = datetime.now()
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
      
-class ExcluirNoticiaView(LoginRequiredMixin, DeleteView):
+class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     #Exclui a notícia
+    permission_required = "app_noticias.delete_noticia"
     model = Noticia
     template_name = 'noticia_confirm_delete.html'
     context_object_name = 'noticia'
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse: 
+        eh_editor: bool = self.request.user.groups.filter(name='Editores').exists()
+        if self.object.publicada and not eh_editor:
+            raise PermissionDenied('Permissão para excluir a notícia negada! Você não possui permissão necessária.')
+        if not eh_editor and self.object.autor != self.request.user:
+            raise PermissionDenied('Permissão para excluir a notícia negada! Você não é o autor da notícia.')
+        return super().form_valid(form)
+
     
     def get_success_url(self):
-        return reverse('home')
-    
-class PublicarNoticiaView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        noticia = get_object_or_404(Noticia, pk=pk)
+        return reverse('noticias')
+
+@login_required(login_url="/accounts/login/")
+@permission_required("app_noticias.pode_publicar")
+def publicar_noticia(request, noticia_id: int, publicado: int) -> HttpResponse:
+    '''
+    Publicar Notícia
+    '''
+    noticia = get_object_or_404(Noticia, pk=noticia_id)
+    if publicado == 1:
         noticia.publicada = True
-        noticia.save()
-        return redirect('home')
-
-
-class DespublicarNoticiaView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        noticia = get_object_or_404(Noticia, pk=pk)
-        noticia.publicada = False
-        noticia.save()
-        return redirect('home')
-
-def SearchView(request):
-    query = request.GET.get('titulo', '')
-    categoria = request.GET.get('categoria', '')
-    if query:
-        resultados = Noticia.objects.filter(titulo__icontains=query)
-    if categoria:
-            resultados = resultados.filter(categoria=categoria)
+        noticia.publicada_em = datetime.now()
     else:
-        resultados = Noticia.objects.all()
-    return render(request, 'search.html', {'resultados': resultados, 'query': query, 'categoria': categoria})
-
-
-
+        noticia.publicada = False
+        noticia.publicada_em = None
+    noticia.save()
+    return HttpResponseRedirect(reverse("noticias"))
