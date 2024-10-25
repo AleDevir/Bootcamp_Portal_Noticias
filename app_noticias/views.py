@@ -73,13 +73,9 @@ class NoticiasView(PermissionRequiredMixin, ListView):
         user = self.request.user
         
         if user.groups.filter(name='Editores').exists():
-            return Noticia.objects.all()
+            return Noticia.objects.all()       
+        return Noticia.objects.filter(autor=self.request.user)
         
-        elif user.is_authenticated:
-            noticias_autor = Noticia.objects.filter(autor=user)
-            noticias_publicadas = Noticia.objects.filter(publicada=True).exclude(autor=user)
-            return noticias_autor | noticias_publicadas
-        return Noticia.objects.filter(publicada=True)
 
     def get_success_url(self):
         return reverse('home')
