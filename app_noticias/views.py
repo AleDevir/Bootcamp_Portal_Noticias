@@ -3,6 +3,7 @@ Módulos views de cadastros
 '''
 from datetime import datetime
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import  DetailView, ListView, DeleteView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.forms import PasswordChangeForm
@@ -14,6 +15,7 @@ from django.forms import BaseModelForm
 from django.urls import reverse
 from django.shortcuts import (
     HttpResponse,
+    HttpResponseRedirect,
 )
 from .models import  Noticia
 from .forms import RegistrarUsuarioForm, NoticiaForm
@@ -147,19 +149,33 @@ class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('noticias')
     
-class PublicarNoticiaView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        noticia = get_object_or_404(Noticia, pk=pk)
+# class PublicarNoticiaView(LoginRequiredMixin, View):
+#     def post(self, request, pk):
+#         noticia = get_object_or_404(Noticia, pk=pk)
+#         noticia.publicada = True
+#         noticia.save()
+#         return redirect('home')
+
+
+# class DespublicarNoticiaView(LoginRequiredMixin, View):
+#     def post(self, request, pk):
+#         noticia = get_object_or_404(Noticia, pk=pk)
+#         noticia.publicada = False
+#         noticia.save()
+#         return redirect('home')
+
+@login_required(login_url="/accounts/login/")
+@permission_required("app_noticias.pode_publicar")
+def publicar_noticia(request, noticia_id: int, publicado: int) -> HttpResponse:
+    '''
+    Publicar Notícia
+    '''
+    noticia = get_object_or_404(Noticia, pk=noticia_id)
+    if publicado == 1:
         noticia.publicada = True
-        noticia.save()
-        return redirect('home')
-
-
-class DespublicarNoticiaView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        noticia = get_object_or_404(Noticia, pk=pk)
+        noticia.publicada_em = datetime.now()
+    else:
         noticia.publicada = False
-        noticia.save()
-        return redirect('home')
-
-
+        noticia.publicada_em = None
+    noticia.save()
+    return HttpResponseRedirect(reverse("noticias"))

@@ -32,35 +32,29 @@
                 </tr>
             </thead>
             <tbody>
-                
+
                 {% for noticia in noticias %}
                 <tr>
                     <td>
                         {% if user.is_authenticated and is_editor %}
-                        
+
                         <div class="form-check form-switch p-0">
                             {% if noticia.publicada %}
-                            <form action="{% url 'despublicar_noticia' noticia.id %}" method="POST" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn p-0 border-0 bg-transparent">
-                                    <img src="{% static 'icones/cancel.png' %}" width="22" height="22" alt="Não Publicada" />
-                                </button>
-                            </form>
+                            <a href="{% url 'publicar-noticia' noticia_id=noticia.id publicado=0 %}">
+                                <img src="/static/icones/checked.png" width="22" height="22" alt="Publicada" />
+                            </a>
                             {% else %}
-                            <form action="{% url 'publicar_noticia' noticia.id %}" method="POST" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn p-0 border-0 bg-transparent">
-                                    <img src="{% static 'icones/checked.png' %}" width="22" height="22" alt="Publicada" />
-                                </button>
-                            </form>
+                            <a href="{% url 'publicar-noticia' noticia_id=noticia.id publicado=1 %}">
+                                <img src="/static/icones/cancel.png" width="22" height="22" alt="Não Publicada" />
+                            </a>
                             {% endif %}
                         </div>
                         {% else %}
-                            {% if noticia.publicada %}
-                            <img src="/static/icones/checked.png" width="22" height="22" alt="Publicada" />
-                            {% else %}
-                            <img src="/static/icones/cancel.png" width="22" height="22" alt="Não Publicada" />
-                            {% endif %}
+                        {% if noticia.publicada %}
+                        <img src="/static/icones/checked.png" width="22" height="22" alt="Publicada" />
+                        {% else %}
+                        <img src="/static/icones/cancel.png" width="22" height="22" alt="Não Publicada" />
+                        {% endif %}
                         {% endif %}
                     </td>
                     <td>{{ noticia.autor.username }}</td>

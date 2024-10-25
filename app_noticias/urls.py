@@ -2,7 +2,7 @@
 URLs Aplicação
 '''
 from django.urls import path
-
+from . import views
 from .views import (
     HomeListView,
     NoticiaDetailView,
@@ -12,10 +12,7 @@ from .views import (
     NoticiasView,
     CadastrarNoticiaView, 
     EditarNoticiaView,
-    ExcluirNoticiaView,
-    PublicarNoticiaView,
-    DespublicarNoticiaView,
-    
+    ExcluirNoticiaView,   
 )
 
 APP_NAME = "app_noticia"
@@ -30,6 +27,6 @@ urlpatterns = [
     path('cadastrar-noticia/', CadastrarNoticiaView.as_view(), name='cadastrar_noticia'),
     path('cadastrar-noticia/<int:pk>/', EditarNoticiaView.as_view(), name='editar_noticia'),
     path('excluir-noticia/<int:pk>/', ExcluirNoticiaView.as_view(), name='excluir_noticia'),
-    path('publicar-noticia/<int:pk>', PublicarNoticiaView.as_view(), name='publicar_noticia'),
-    path('despublicar-noticia/<int:pk>/', DespublicarNoticiaView.as_view(), name='despublicar_noticia'),
+    path('noticias/publicar/<int:noticia_id>/<int:publicado>', views.publicar_noticia, name='publicar-noticia'),
+
 ]
