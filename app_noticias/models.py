@@ -36,7 +36,7 @@ class Noticia(models.Model):
     publicada_em = models.DateTimeField('Publicada em', help_text='dd/mm/yyyy hh:MM', null=True, editable=False)
     publicada = models.BooleanField('Publicada', default=False)
     num_visualizacoes = models.IntegerField(default=0, verbose_name='Número de visualizações', editable=False)
-
+    fonte_informacao = models.CharField('Fonte', max_length=400, null=True )
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.titulo)

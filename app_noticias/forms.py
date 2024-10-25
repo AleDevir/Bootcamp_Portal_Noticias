@@ -24,4 +24,4 @@ class RegistrarUsuarioForm(UserCreationForm):
 class NoticiaForm(forms.ModelForm):
     class Meta:
         model = Noticia
-        fields = ['titulo', 'conteudo', 'imagem', 'categoria']
+        fields = ['titulo', 'subtitulo', 'conteudo', 'imagem', 'categoria', 'fonte_informacao']
