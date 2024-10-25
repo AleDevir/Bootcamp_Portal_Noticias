@@ -134,6 +134,15 @@ class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     model = Noticia
     template_name = 'noticia_confirm_delete.html'
     context_object_name = 'noticia'
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse: 
+        eh_editor: bool = self.request.user.groups.filter(name='Editores').exists()
+        if self.object.publicada and not eh_editor:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não possui permissão necessária.')
+        if not eh_editor and self.object.autor != self.request.user:
+            raise PermissionDenied('Permissão para alterar a notícia negada! Você não é o autor da notícia.')
+        return super().form_valid(form)
+
     
     def get_success_url(self):
         return reverse('noticias')
