@@ -5,6 +5,7 @@ from datetime import datetime
 from django.template.defaultfilters import slugify
 from django.db import models
 from django.contrib.auth.models import User
+from .util.tempo_util import calcular_tempo_decorrido
 
 
 class Categoria(models.Model):
@@ -37,6 +38,23 @@ class Noticia(models.Model):
     publicada = models.BooleanField('Publicada', default=False)
     num_visualizacoes = models.IntegerField(default=0, verbose_name='Número de visualizações', editable=False)
     fonte_informacao = models.CharField('Fonte', max_length=400, null=True )
+
+    def _calcular_tempo_da_atualizacao(self) -> str:
+        '''
+        Calculo do tempo de atualização da notícia:
+        '''
+        return calcular_tempo_decorrido(self.atualizada_em)
+
+    atualizacao_tempo = property(_calcular_tempo_da_atualizacao)
+
+    def _calcular_tempo_da_publicacao(self) -> str:
+        '''
+        Calculo do tempo de publicação da notícia:
+        '''
+        return calcular_tempo_decorrido(self.publicada_em)
+
+    publicacao_tempo = property(_calcular_tempo_da_publicacao)
+
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.titulo)
