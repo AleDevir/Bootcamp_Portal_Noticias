@@ -69,6 +69,19 @@
         </div>
 
     </div>
+            <form class="d-flex" role="search" method="GET" action="{% url 'app_noticias:SearchView' %}" style="border: 1px solid #ccc; border-radius: 5px; padding: 5px;">
+        <select class="form-select me-2" name="categoria" aria-label="Categorias">
+            <option selected value="">Todas</option>
+            <option value="categoria1">Categoria 1</option>
+            <option value="categoria2">Categoria 2</option>
+            <option value="categoria3">Categoria 3</option>
+        </select>
+        <input class="form-control me-2" type="search" name="titulo" placeholder="Pesquisar Título" aria-label="Search" value="{{ request.GET.titulo }}">
+        <button class="btn btn-outline-info" type="submit">
+            <img src="{{ procurar_url }}" width="22" height="22" alt="Buscar">
+        </button>
+    </form>
+        
     <div>
         {% block content %}{% endblock %}
     </div>
