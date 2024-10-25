@@ -47,8 +47,7 @@
 
                     {% if user.is_authenticated and is_editor %}
                     <li class="dropdown-item d-flex "><img src="{{ editor_url }}" width="20" height="20" class="mt-1" />
-                        <a href="{% url 'noticias' user.id %}" class="dropdown-item text-info"
-                            type="button">Publicar</a>
+                        <a href="{% url 'noticias' %}" class="dropdown-item text-info" type="button">Publicar</a>
                     </li>
                     {% endif %}
 
