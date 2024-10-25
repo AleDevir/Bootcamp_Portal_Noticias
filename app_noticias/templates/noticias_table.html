@@ -40,13 +40,19 @@
                         
                         <div class="form-check form-switch p-0">
                             {% if noticia.publicada %}
-                            <a href="{% url 'despublicar_noticia' noticia.id %}">
-                                <img src="{% static 'icones/checked.png' %}" width="22" height="22" alt="Publicada" />
-                            </a>
+                            <form action="{% url 'despublicar_noticia' noticia.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn p-0 border-0 bg-transparent">
+                                    <img src="{% static 'icones/cancel.png' %}" width="22" height="22" alt="Não Publicada" />
+                                </button>
+                            </form>
                             {% else %}
-                            <a href="{% url 'publicar_noticia' noticia.id %}">
-                                <img src="{% static 'icones/cancel.png' %}" width="22" height="22" alt="Não Publicada" />
-                            </a>
+                            <form action="{% url 'publicar_noticia' noticia.id %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn p-0 border-0 bg-transparent">
+                                    <img src="{% static 'icones/checked.png' %}" width="22" height="22" alt="Publicada" />
+                                </button>
+                            </form>
                             {% endif %}
                         </div>
                         {% else %}
@@ -79,7 +85,7 @@
                             </a>
                             {% endif %}
 
-                            {% if is_author and not noticia.publicada %}
+                            {% if request.user == noticia.autor and not noticia.publicada %}
                             <a href="{% url 'editar_noticia' noticia.id %}">
                                 <img src="/static/icones/edit.png" width="22" height="22" class="m-1" alt="Editar" />
                             </a>

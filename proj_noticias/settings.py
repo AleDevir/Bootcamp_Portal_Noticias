@@ -134,5 +134,3 @@ MEDIA_ROOT = BASE_DIR.joinpath('media')
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-#AUTH_USER_MODEL = 'app_noticias.CustomUser'
