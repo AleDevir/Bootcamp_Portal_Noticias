@@ -83,7 +83,7 @@ class NoticiasView(PermissionRequiredMixin, ListView):
         return Noticia.objects.filter(autor=self.request.user)
         
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
     
 class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     #Cadastra a notícia
@@ -97,7 +97,7 @@ class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
     
 class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     #Edita a notícia
@@ -116,7 +116,7 @@ class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
      
 class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     #Exclui a notícia
@@ -126,7 +126,7 @@ class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
     context_object_name = 'noticia'
     
     def get_success_url(self):
-        return reverse('home')
+        return reverse('noticias')
     
 class PublicarNoticiaView(LoginRequiredMixin, View):
     def post(self, request, pk):
