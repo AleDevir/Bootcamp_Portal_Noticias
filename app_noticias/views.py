@@ -2,6 +2,7 @@
 Módulos views de cadastros
 '''
 from datetime import datetime
+from django.template.defaultfilters import slugify
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import  DetailView, ListView, DeleteView, View
@@ -14,11 +15,13 @@ from django.contrib.auth.models import User
 from django.forms import BaseModelForm
 from django.urls import reverse
 from django.shortcuts import (
+    render,
     HttpResponse,
     HttpResponseRedirect,
 )
-from .models import  Noticia
+from .models import  Noticia, Categoria
 from .forms import RegistrarUsuarioForm, NoticiaForm
+
 
 
 class HomeListView(ListView):
@@ -173,3 +176,4 @@ def publicar_noticia(request, noticia_id: int, publicado: int) -> HttpResponse:
         noticia.publicada_em = None
     noticia.save()
     return HttpResponseRedirect(reverse("noticias"))
+

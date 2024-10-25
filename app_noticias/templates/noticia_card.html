@@ -1,23 +1,24 @@
 {% load django_bootstrap5 %}
 {% load static %}
+<!-- {% static 'media' as media_url %} -->
+
 
 {% for uma_noticia in object_list %}
-
-<div class="card mb-3 border-0 " style="max-width: 540px; position: relative; padding-top: 180px;">
-    <a href="{% url 'noticia-detail' uma_noticia.id %}" class=" text-decoration-none border-bottom">
-
-        <div class="row g-0">
-            <div class="col-md-4 ratio ratio-16x9" style="object-fit: contain;">
-                <img src="" alt="" class="w-100 rounded">
-            </div>
-            <div class="col-md-8 w-100 text-justify ">
-                <div class="card-body ">
-                    <p class="card-title fs-4 text-light ">Título</p>
-                    <p class="card-text fs-6 text-info ">PARTE DO CONTEÚDO??</p>
-                    <p class="card-text text-info "><small class="text-body-secondary">Em Categoria(s)</small></p>
-                </div>
-            </div>
+<a href="{% url 'noticia-detail' uma_noticia.slug %}" class="  text-decoration-none">
+    <div class=" d-flex border-bottom " style="margin-bottom: 20px; flex-wrap: wrap; padding: 0;">
+        <div class="ratio ratio-16x9 " style="object-fit: contain; max-width: 340px;   margin-bottom: 10px;">
+            <img src="media/{{uma_noticia.imagem}}" alt="{{uma_noticia.titulo}}" class="w-100 rounded">
         </div>
-    </a>
-</div>
+        <div class="col">
+            <p class="ms-4 fs-4 text-light ">{{uma_noticia.titulo}}</p>
+            <p class="ms-4  fs-6 text-info ">{{uma_noticia.subtitulo}}</p>
+
+            <p class="ms-4 text-info "><small class="text-body-secondary">
+                    {% for categoria in uma_noticia.categorias.all %}
+                    {{categoria.nome}}<br />
+                    {% endfor %}
+                </small></p>
+        </div>
+    </div>
+</a>
 {% endfor %}
