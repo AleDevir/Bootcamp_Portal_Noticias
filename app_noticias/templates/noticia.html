@@ -1,19 +1,48 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
-{% block content %}
 {% load static %}
+{% block content %}
+{% static 'media' as media_url %}
+
+<a href="javascript:history.back()" class="mb-3 mt-5 ms-3 text-decoration-none btn btn-outline-info">Voltar</a>
+
+<div class=" p-5 ">
+
+    <div class="d-flex  justify-content-center ">
+        <div class="d-flex flex-column" style="width: 740px;">
+            <div class="ratio ratio-1x1 mb-3" style="object-fit: contain; ">
+                <img src="/media/{{noticia.imagem}}" class="rounded w-100" alt="{{noticia.titulo}}">
+            </div>
+            <div class="">
+                {% if noticia.publicada %}
+                <p class="text-secondary">Publicada {{noticia.publicada_em}}</p>
+                <p class="text-secondary">Útima atualização há {{noticia.atualizacao_tempo}}</p>
+                <p class="text-secondary"> por {{noticia.autor}}</p>
+                {% else %}
+                <p class="text-secondary">Ultima atualização {{noticia.atualizacao_tempo}} por {{noticia.autor}}</p>
+                {% endif %}
+                {% for categoria in noticia.categorias.all %}
+                <p class="text-secondary">Em {{categoria.nome}}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex text-center justify-content-center text-wrap" style="padding: 40px; ">
+        <div class="fs-5" style="max-width: 680px; text-align: justify;">
+            <p class="text-info fs-3">{{noticia.titulo}}</p>
+
+            <p>
+
+                {{ noticia.conteudo|safe|linebreaks }}
+            </p><br>
 
 
-<div class="m-4 justify-content-center  align-items-center w-50 ">
-    <a href="javascript:history.back()" class="mb-3   text-decoration-none btn btn-outline-info">Voltar</a>
-    <img src="/media/{{noticia.imagem}}" class="rounded w-100" alt="{{uma_noticia.titulo}}">
-    <p class="text-capitalize text-justify text-secondary">Em {{noticia.categoria}}</p>
-    {% if noticia.publicada %}
-    <p class="text-secondary">Publicada em {{ noticia.publicada_em }}</p>
-    {% endif %}
-    <p class="text-secondary">Ultima atualização {{noticia.atualizada_em}} por {{noticia.autor}}</p>
-    <p>{{noticia.titulo}}</p>
-    <p>{{noticia.conteudo}}</p>
+
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

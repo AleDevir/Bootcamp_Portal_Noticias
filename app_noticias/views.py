@@ -32,7 +32,7 @@ class HomeListView(ListView):
     template_name = 'home.html'
 
     def get_queryset(self):
-        return Noticia.objects.filter(publicada=True)
+        return Noticia.objects.filter(publicada=True).order_by('-publicada_em')
 
 class NoticiaDetailView(DetailView):
     '''

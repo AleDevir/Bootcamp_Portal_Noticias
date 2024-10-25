@@ -12,7 +12,11 @@
         <div class="col">
             <p class="ms-4 fs-4 text-light ">{{uma_noticia.titulo}}</p>
             <p class="ms-4  fs-6 text-info ">{{uma_noticia.subtitulo}}</p>
-
+            {% if uma_noticia.publicacao_tempo == 'agora' %}
+            <p class="ms-4 fs-6 text-info text-capitalize">{{uma_noticia.publicacao_tempo}}</p>
+            {% else %}
+            <p class="ms-4 fs-6 text-info">Há {{uma_noticia.publicacao_tempo}}</p>
+            {% endif %}
             <p class="ms-4 text-info "><small class="text-body-secondary">
                     {% for categoria in uma_noticia.categorias.all %}
                     {{categoria.nome}}<br />
