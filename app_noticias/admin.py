@@ -15,6 +15,8 @@ class NoticiaAdmin(admin.ModelAdmin):
     '''
     list_display = [
         'titulo',
+        'slug',
+        'subtitulo',
         'criada_em',
         'atualizada_em',
         'publicada',
