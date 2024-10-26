@@ -3,11 +3,21 @@
 {% load static %}
 {% block content %}
 
-<div class="position-fixed w-100" style="z-index: 10; ">
+<div class="position-fixed w-100" style="z-index: 10;">
     {% include "search.html" %}
 </div>
-<br /><br /><br />
-<div class="container">
-    {% include "noticia_card.html" %}
+<div style="height: 60px;"></div>
+<div class="d-none d-md-block ">
+    {% include "carrossel.html" %}
+</div>
+
+<div style="margin-top: 60px; padding: 0; margin-left: 35px;">
+    <div class="row mt-3">
+        <div class="col-8 mt-3 mb-3">
+            {% include "noticia_card.html" %}
+
+        </div>
+    </div>
+
 </div>
 {% endblock %}
