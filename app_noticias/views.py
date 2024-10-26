@@ -89,7 +89,6 @@ class NoticiasView(PermissionRequiredMixin, NoticiasBaseListView):
     def get_success_url(self):
         return reverse('noticias')
  
-
 class NoticiaDetailView(DetailView):
     '''
     Detalhe da Notícia
@@ -105,6 +104,12 @@ class NoticiaDetailView(DetailView):
         pode_ver_noticia_nao_publicada: bool = eh_editor or eh_autor_da_noticia
         if not self.object.publicada and not pode_ver_noticia_nao_publicada:
             raise PermissionDenied('Permissão para ver a notícia negada! Está notícia não foi publicada.')
+        
+        identificador = kwargs.get('pk', 0)
+        if self.object.publicada and not identificador:
+            self.object.num_visualizacoes += 1
+            self.object.save()
+        
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
