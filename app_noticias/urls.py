@@ -19,6 +19,7 @@ from .views import (
 APP_NAME = "app_noticia"
 
 urlpatterns = [
+    path('', views.root, name='root'),
     path("portal/", HomeListView.as_view(), name='home'),
     path("register/", CriarUsuarioView.as_view(), name='registrar-usuario'),
     path('register/edit/<int:pk>', UsuarioUpdateView.as_view(), name='atualizar-usuario'),

@@ -1,13 +1,13 @@
 {% load django_bootstrap5 %}
 {% load static %}
-<!-- {% static 'media' as media_url %} -->
+{% static 'media' as media_url %}
 
 
 {% for uma_noticia in noticias %}
 <a href="{% url 'noticia-detail' uma_noticia.slug %}" class="  text-decoration-none">
     <div class=" d-flex border-bottom " style="margin-bottom: 20px; flex-wrap: wrap; padding: 0;">
         <div class="ratio ratio-16x9 " style="object-fit: contain; max-width: 340px;   margin-bottom: 10px;">
-            <img src="/media/{{uma_noticia.imagem}}" alt="{{uma_noticia.titulo}}" class="w-100 rounded">
+            <img src="{{media_url}}/{{uma_noticia.imagem}}" alt="{{uma_noticia.titulo}}" class="w-100 rounded">
         </div>
         <div class="col">
             <p class="ms-4 fs-4 text-light ">{{uma_noticia.titulo}}</p>

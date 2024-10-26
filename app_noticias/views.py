@@ -22,6 +22,11 @@ from django.shortcuts import (
 from .models import  Noticia, Categoria
 from .forms import RegistrarUsuarioForm, NoticiaForm
 
+def root(request) -> HttpResponse:
+    '''
+    Redirecionamento de root para home
+    '''
+    return HttpResponseRedirect(reverse("home"))
 
 class NoticiasBaseListView(ListView):
     '''
