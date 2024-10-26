@@ -5,11 +5,11 @@ from datetime import datetime
 from django.template.defaultfilters import slugify
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.generic import  DetailView, ListView, DeleteView, View
+from django.views.generic import  DetailView, ListView, DeleteView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.forms import BaseModelForm
@@ -23,16 +23,72 @@ from .models import  Noticia, Categoria
 from .forms import RegistrarUsuarioForm, NoticiaForm
 
 
-
-class HomeListView(ListView):
+class NoticiasBaseListView(ListView):
     '''
-    Listar as nóticias na página Home
+    Classe base da listagem das notícias (home e área administrativa)
     '''
     model = Noticia
+    context_object_name = 'noticias'
+    titulo_pesquisado = ''
+    categoria_pesquisada = 0
+    publicada = False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titulo_pesquisado'] = self.titulo_pesquisado
+        context['categoria_pesquisada'] = self.categoria_pesquisada
+        context['categorias'] = Categoria.objects.all()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.titulo_pesquisado = self.request.POST['titulo_pesquisado']
+        self.categoria_pesquisada = int(self.request.POST['categoria_pesquisada'])
+        return render(request, self.template_name, {
+            'titulo_pesquisado': self.titulo_pesquisado,
+            'categoria_pesquisada': self.categoria_pesquisada,
+            'categorias': Categoria.objects.all(),
+            'noticias': self.get_queryset(),
+        })
+
+    def get_filtragem(self):
+        filtragem = {}
+        if self.titulo_pesquisado:
+            filtragem['slug__contains'] = slugify(self.titulo_pesquisado)
+        if self.categoria_pesquisada != 0:
+            filtragem['categoria'] = int(self.categoria_pesquisada)
+        if self.publicada:
+            filtragem['publicada'] = self.publicada
+        return filtragem
+
+class HomeListView(NoticiasBaseListView):
+    '''
+    Listar as nóticias publicadas em home
+    '''
     template_name = 'home.html'
+    publicada = True
 
     def get_queryset(self):
-        return Noticia.objects.filter(publicada=True).order_by('-publicada_em')
+        filtragem = self.get_filtragem()
+        return Noticia.objects.filter(**filtragem).order_by('-publicada_em')
+
+class NoticiasView(PermissionRequiredMixin, NoticiasBaseListView):
+    '''
+    Visualiza a área administrativa de notícias
+    '''
+    permission_required = "app_noticias.view_noticia"
+    template_name = 'noticias_table.html'
+   
+
+    def get_queryset(self):
+        user = self.request.user
+        filtragem = self.get_filtragem()
+        if not user.groups.filter(name='Editores').exists():
+            filtragem['autor'] = user
+        return Noticia.objects.filter(**filtragem).order_by('titulo')
+        
+    def get_success_url(self):
+        return reverse('noticias')
+ 
 
 class NoticiaDetailView(DetailView):
     '''
@@ -81,23 +137,6 @@ class TrocarSenhaView(PasswordChangeView):
     template_name = 'password_edit.html'
     def get_success_url(self):
         return reverse('home')
-    
-class NoticiasView(PermissionRequiredMixin, ListView):
-    #Visualiza a área administrativa de notícias
-    permission_required = "app_noticias.view_noticia"
-    model = Noticia
-    template_name = 'noticias_table.html'
-    context_object_name = 'noticias'
-
-    def get_queryset(self):
-        user = self.request.user
-        
-        if user.groups.filter(name='Editores').exists():
-            return Noticia.objects.all()       
-        return Noticia.objects.filter(autor=self.request.user)
-        
-    def get_success_url(self):
-        return reverse('noticias')
     
 class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     #Cadastra a notícia

@@ -4,24 +4,33 @@
 <div>
     <nav class="navbar navbar-expand-lg" style="background-color:#223140;">
         <div class="container-fluid  ">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler  mb-3 mt-2 text-info " type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon border-0" style="max-width: 20px;"></span>
             </button>
             <div class="collapse navbar-collapse px-2 " id="navbarSupportedContent">
 
-                <form class="d-flex " role="search">
-                    <select class="form-select" style="margin-right: 5px;" name="categoria"
+                <form class="d-flex " role="search" method="POST">
+                    {% csrf_token %}
+                    <select class="form-select" style="margin-right: 5px;" name="categoria_pesquisada"
                         aria-label="Default select example">
-                        <option selected value="">Todas</option>
-                        <option selected value="">....</option>
-                        <option selected value="">....</option>
-                        <option selected value="">....</option>
+                        {% if categoria_pesquisada == 0 %}
+                        <option selected value="0">Todas</option>
+                        {% else %}
+                        <option value="0">Todas</option>
+                        {% endif %}
+                        {% for uma_categoria in categorias %}
+                        {% if categoria_pesquisada == uma_categoria.id %}
+                        <option selected value="{{uma_categoria.id}}">{{uma_categoria.nome}}</option>
+                        {% else %}
+                        <option value="{{uma_categoria.id}}">{{uma_categoria.nome}}</option>
+                        {% endif %}
+                        {% endfor %}
                     </select>
-                    <input class="form-control me-2 " type="search" name="titulo" placeholder="Pesquisar Título"
-                        aria-label="Search" value="">
-                    <button class="btn btn-outline-info btn-sm" type="submit"><img src="{{procurar_url}}" width="22"
+                    <input class="form-control me-2 " type="search" name="titulo_pesquisado"
+                        placeholder="Pesquisar Título" aria-label="Search" value="{{titulo_pesquisado}}">
+                    <button class="btn btn-outline-info btn-sm" type="submit"><img src="{{ procurar_url }}" width="22"
                             height="22"></button>
 
                 </form>
