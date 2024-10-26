@@ -1,0 +1,38 @@
+{% load django_bootstrap5 %}
+{% load static %}
+{% static 'media' as media_url %}
+
+
+<div class=" shadow-lg w-100 justify-content-center d-flex " style=" height: 300px;">
+    <div id="carouselExampleControls" data-bs-ride="carousel" class="carousel slide w-50 p-4 ">
+        <div class="carousel-inner rounded" style=" height: 250px; ">
+            {% for uma_categoria in categorias %}
+            {% if categoria_pesquisada == uma_categoria.id %}
+            <div class="ratio ratio-21x9" style="object-fit: contain;">
+                <img src="/media/{{uma_categoria.imagem}}" alt="{{uma_categoria.nome}}" class="d-block w-100">
+                <p class=" fs-3 text-center p-2">Notícias sobre {{uma_categoria.nome}}</p>
+            </div>
+            {% else %}
+            <a href="{% url 'home' %}?categoria={{uma_categoria.id}}" class="text-decoration-none text-light">
+                <div class="carousel-item active ratio ratio-21x9" style="object-fit: contain;">
+                    <img src="/media/{{uma_categoria.imagem}}" alt="{{uma_categoria.nome}}" class="d-block w-100">
+                    <p class=" fs-3 text-center p-2">Notícias sobre {{uma_categoria.nome}}</p>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% if categoria_pesquisada == 0 %}
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Próximo</span>
+        </button>
+        {% endif %}
+    </div>
+</div>

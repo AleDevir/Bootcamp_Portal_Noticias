@@ -33,12 +33,16 @@ class NoticiasBaseListView(ListView):
     categoria_pesquisada = 0
     publicada = False
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['titulo_pesquisado'] = self.titulo_pesquisado
-        context['categoria_pesquisada'] = self.categoria_pesquisada
-        context['categorias'] = Categoria.objects.all()
-        return context
+    def get(self, request, *args, **kwargs):
+        categoria_querystring = self.request.GET.get('categoria', 0)
+        if categoria_querystring:
+            self.categoria_pesquisada = int(categoria_querystring)
+        return render(request, self.template_name, {
+            'titulo_pesquisado': self.titulo_pesquisado,
+            'categoria_pesquisada': self.categoria_pesquisada,
+            'categorias': Categoria.objects.all(),
+            'noticias': self.get_queryset(),
+        })
 
     def post(self, request, *args, **kwargs):
         self.titulo_pesquisado = self.request.POST['titulo_pesquisado']
