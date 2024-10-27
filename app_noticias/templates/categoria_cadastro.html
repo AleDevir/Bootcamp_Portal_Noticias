@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+{% load static %}
+
+<div class="d-flex col  justify-content-center ">
+    <P class="justify-content-center fs-2 text-info">Cadastrar Categoria</p>
+</div>
+<div class="d-flex col  justify-content-center ">
+    <a href="javascript:history.back()" class="mb-3   text-decoration-none btn btn-outline-info">&laquo; Voltar </a>
+</div>
+
+<div class="d-flex col-auto  justify-content-center mt-5 p-3">
+
+    <div class=" shadow-lg p-5 mb-5  rounded ">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button value="Submit" class="btn btn-outline-info w-100" type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
