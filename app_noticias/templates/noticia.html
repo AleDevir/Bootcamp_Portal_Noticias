@@ -9,40 +9,40 @@
 <div class=" p-5 ">
 
     <div class="d-flex  justify-content-center ">
-        <div class="d-flex flex-column" style="width: 740px;">
+        <div class="d-flex flex-column" style="width: 540px;">
             <div class="ratio ratio-1x1 mb-3" style="object-fit: contain; ">
                 <img src="{{media_url}}/{{noticia.imagem}}" class="rounded w-100" alt="{{noticia.titulo}}">
             </div>
-            <div class="">
+            <div>
+                <p class="text-secondary">Por {{noticia.autor}}</p>
                 {% if noticia.publicada %}
-                <p class="text-secondary">Publicada {{noticia.publicada_em}}</p>
-                <p class="text-secondary">Útima atualização há {{noticia.atualizacao_tempo}}</p>
-                <p class="text-secondary"> por {{noticia.autor}}</p>
+                <p class="text-secondary">Publicada {{noticia.publicada_em}} - Atualizado há
+                    {{noticia.atualizacao_tempo}}
+                </p>
                 {% else %}
-                <p class="text-secondary">Ultima atualização {{noticia.atualizacao_tempo}} por {{noticia.autor}}</p>
+                <p class="text-secondary">Atualizado há {{noticia.atualizacao_tempo}}</p>
                 {% endif %}
-                {% for categoria in noticia.categorias.all %}
-                <p class="text-secondary">Em {{categoria.nome}}</p>
+                {% for cate in noticia.categoria.all %}
+                <p class="text-secondary">Em {{cate.nome}}</p>
                 {% endfor %}
             </div>
         </div>
 
     </div>
-
     <div class="d-flex text-center justify-content-center text-wrap" style="padding: 40px; ">
         <div class="fs-5" style="max-width: 680px; text-align: justify;">
             <p class="text-info fs-3">{{noticia.titulo}}</p>
-
             <p>
-
                 {{ noticia.conteudo|safe|linebreaks }}
             </p><br>
-
-
-
+            {% if noticia.fonte_informacao|first in "http" %}
+            <a href="{{noticia.fonte_informacao}}" target="_blank" class=" text-decoration-none"><small
+                    class="text-info">Fonte</small></a>
+            {% else %}
+            <p class="text-secondary"><small>Fonte: {{noticia.fonte_informacao}}</small></p> </small>
+            {% endif %}
         </div>
     </div>
-
 </div>
 
 {% endblock %}
