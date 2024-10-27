@@ -97,30 +97,63 @@ class NoticiasView(PermissionRequiredMixin, NoticiasBaseListView):
         
     def get_success_url(self):
         return reverse('noticias')
- 
-class NoticiaDetailView(DetailView):
+
+class NoticiaBaseDetailView(DetailView):
     '''
-    Detalhe da Notícia
+    Classe Base dos detalhes da notícia
     '''
     model = Noticia
     template_name = 'noticia.html'
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+    def acrescentar_visualizacao(self, noticia_id: int = 0) -> None:
+        '''
+        Estrutura para uma classe filha implementar.
+        '''
+        pass
+
+    def pode_ver_uma_noticia_nao_publicada(self) -> bool:
+        '''
+        Informa se pode ou não ver uma notícia.
+        '''
         eh_editor: bool = self.request.user.has_perm('app_noticias.pode_publicar')
         eh_autor: bool = self.request.user.has_perm('app_noticias.add_noticia')
-        eh_autor_da_noticia: bool = eh_autor and self.object.autor == request.user
+        eh_autor_da_noticia: bool = eh_autor and self.object.autor == self.request.user
         pode_ver_noticia_nao_publicada: bool = eh_editor or eh_autor_da_noticia
-        if not self.object.publicada and not pode_ver_noticia_nao_publicada:
+        return self.object.publicada or pode_ver_noticia_nao_publicada
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if not self.pode_ver_uma_noticia_nao_publicada():
             raise PermissionDenied('Permissão para ver a notícia negada! Está notícia não foi publicada.')
-        
+
         identificador = kwargs.get('pk', 0)
-        if self.object.publicada and not identificador:
-            self.object.num_visualizacoes += 1
-            self.object.save()
-        
+        self.acrescentar_visualizacao(identificador)
+
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
+
+
+class NoticiaDetailView(NoticiaBaseDetailView):
+    '''
+    Detalhe da notícia no Portal de Notícias
+    '''
+
+    def acrescentar_visualizacao(self, noticia_id: int = 0):
+        '''
+        Uma notícia visualizada no Portal de Notícias deve ser acrescentado
+        o seu número de visualizações.
+        '''
+        if self.object.publicada and not noticia_id:
+            self.object.num_visualizacoes += 1
+            self.object.save()
+
+class NoticiaAdmDetailView(PermissionRequiredMixin, NoticiaBaseDetailView):
+    '''
+    Detalhe da Notícia na Área Administrativa.
+    '''
+    permission_required = "app_noticias.view_noticia"
+
 
 class CriarUsuarioView(CreateView):
     '''
