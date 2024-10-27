@@ -43,6 +43,9 @@
                     <li class="dropdown-item d-flex "><img src="{{ news_url }}" width="20" height="20" class="mt-1" />
                         <a href="{% url 'noticias'  %}" class="dropdown-item text-info">Minhas noticias</a>
                     </li>
+                    <li class="dropdown-item d-flex "><img src="{{ news_url }}" width="20" height="20" class="mt-1" />
+                        <a href="{% url 'logs' %}" class="dropdown-item text-info" type="button">Logs</a>
+                    </li>
                     {% endif %}
 
                     {% if user.is_authenticated and is_editor %}
@@ -52,7 +55,9 @@
                     <li class="dropdown-item d-flex "><img src="{{ editor_url }}" width="20" height="20" class="mt-1" />
                         <a href="{% url 'categorias' %}" class="dropdown-item text-info" type="button">Categorias</a>
                     </li>
-
+                    <li class="dropdown-item d-flex "><img src="{{ news_url }}" width="20" height="20" class="mt-1" />
+                        <a href="{% url 'logs' %}" class="dropdown-item text-info" type="button">Logs</a>
+                    </li>
                     {% endif %}
 
                     <li class="dropdown-item d-flex ">
