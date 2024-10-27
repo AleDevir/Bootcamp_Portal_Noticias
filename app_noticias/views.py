@@ -14,13 +14,28 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.forms import BaseModelForm
 from django.urls import reverse
+from django.http import HttpRequest
+from django.db.models import Model
 from django.shortcuts import (
     render,
     HttpResponse,
     HttpResponseRedirect,
 )
-from .models import  Noticia, Categoria
+from .models import  Noticia, Categoria, UserAction
 from .forms import RegistrarUsuarioForm, NoticiaForm, CategoriaForm
+
+def log_user_action(request : HttpRequest, obj: Model, action: str, object_name: str = '') -> None:
+    '''
+    Registro das ações de autores e editores
+    '''
+    UserAction.objects.create(
+        user=request.user,
+        action=action,
+        object_id = obj.pk,
+        object_name = obj.__doc__ if not object_name else object_name,
+        object_text = str(obj)
+    )
+
 
 def root(request) -> HttpResponse:
     '''
@@ -172,6 +187,12 @@ class UsuarioUpdateView(UpdateView):
     fields = ['username', 'email']
     template_name = 'user_edit.html'
     def get_success_url(self):
+        log_user_action(
+            request=self.request,
+            obj=self.object,
+            action='alterou perfil',
+            object_name='Usuário'
+        )
         return reverse('home')
 
 class TrocarSenhaView(PasswordChangeView):
@@ -180,7 +201,14 @@ class TrocarSenhaView(PasswordChangeView):
     '''
     form_class = PasswordChangeForm
     template_name = 'password_edit.html'
+
     def get_success_url(self):
+        log_user_action(
+            request=self.request,
+            obj=self.request.user,
+            action='trocou a senha',
+            object_name='Usuário'
+        )
         return reverse('home')
     
 class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
@@ -195,6 +223,7 @@ class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        log_user_action(request=self.request, obj=self.object, action='incluiu a')
         return reverse('noticias')
 
 class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
@@ -224,6 +253,7 @@ class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        log_user_action(request=self.request, obj=self.object, action='alterou a')
         return reverse('noticias')
      
 class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
@@ -243,11 +273,12 @@ class ExcluirNoticiaView(PermissionRequiredMixin, DeleteView):
 
     
     def get_success_url(self):
+        log_user_action(request=self.request, obj=self.object, action='excluiu a')
         return reverse('noticias')
 
 @login_required(login_url="/accounts/login/")
 @permission_required("app_noticias.pode_publicar")
-def publicar_noticia(request, noticia_id: int, publicado: int) -> HttpResponse:
+def publicar_noticia(request: HttpRequest, noticia_id: int, publicado: int) -> HttpResponse:
     '''
     Publicar Notícia
     '''
@@ -255,12 +286,13 @@ def publicar_noticia(request, noticia_id: int, publicado: int) -> HttpResponse:
     if publicado == 1:
         noticia.publicada = True
         noticia.publicada_em = datetime.now()
+        log_user_action(request=request, obj=noticia, action='publicou')
     else:
         noticia.publicada = False
         noticia.publicada_em = None
+        log_user_action(request=request, obj=noticia, action='retirou a publicação de')
     noticia.save()
     return HttpResponseRedirect(reverse("noticias"))
-
 
 
 class CategoriasView(PermissionRequiredMixin, ListView):
@@ -285,6 +317,7 @@ class CadastrarCategoriaView(PermissionRequiredMixin, CreateView):
     template_name = 'categoria_cadastro.html'
 
     def get_success_url(self):
+        log_user_action(request=self.request, obj=self.object, action='incluiu a')
         return reverse('categorias')
     
 class EditarCategoriaView(PermissionRequiredMixin, UpdateView):
@@ -292,15 +325,13 @@ class EditarCategoriaView(PermissionRequiredMixin, UpdateView):
     Visualiza a edição de categoria na área administrativa de categorias
     '''
     model = Categoria
-    # form_class = CategoriaForm
-    fields = ['nome',  'imagem']
+    form_class = CategoriaForm
     permission_required = "app_noticias.change_categoria"
     template_name = 'categoria_cadastro.html'   
-
     def get_success_url(self):
+        log_user_action(request=self.request, obj=self.object, action='alterou a')
         return reverse('categorias')
     
-
 class ExcluirCategoriaView(PermissionRequiredMixin, DeleteView):
     '''
     Visualiza a decisão de deletar uma categoria na área administrativa de categorias
@@ -311,4 +342,18 @@ class ExcluirCategoriaView(PermissionRequiredMixin, DeleteView):
     context_object_name = 'categoria'
 
     def get_success_url(self):
+        log_user_action(request=self.request, obj=self.object, action='excluiu a')
         return reverse('categorias')
+
+class UserActionView(PermissionRequiredMixin, ListView):
+    '''
+    Visualiza a área auditoria
+    '''
+    model = UserAction
+    permission_required = "app_noticias.view_useraction"
+    context_object_name = 'actions'
+    template_name = 'useractions_table.html'
+      
+    def get_success_url(self):
+        return reverse('logs')
+  

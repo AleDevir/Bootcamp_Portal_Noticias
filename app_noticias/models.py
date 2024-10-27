@@ -81,3 +81,17 @@ class Noticia(models.Model):
             return  f"Título: {str(self.titulo)} - PUBLICADA"
         return f"Título: {str(self.titulo)}"
 
+
+class UserAction(models.Model):
+    '''
+    User Action
+    '''
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, editable=False, help_text='Usuário que realizou a ação')
+    action = models.CharField(max_length=255, editable=False, help_text='Ação realizada no objeto.')
+    object_id = models.IntegerField('Identificador', editable=False, help_text='ID do objeto manipulado')
+    object_name = models.CharField('Modelo', max_length=20, editable=False, help_text='Nome do Modelo do objeto manipulado')
+    object_text = models.CharField('Texto', max_length=100, editable=False, help_text='Texto (__str__) do objeto manipulado')
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False, help_text='Data da ação')
+
+    def __str__(self):
+        return f'{self.user.username} {self.action} {self.object_name} de ID={self.object_id} EM:{self.timestamp} - {self.object_text}'

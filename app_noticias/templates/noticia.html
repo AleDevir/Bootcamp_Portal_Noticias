@@ -34,8 +34,8 @@
             <p class="text-info fs-3">{{noticia.titulo}}</p>
             <p>
                 {{ noticia.conteudo|safe|linebreaks }}
-            </p><br>
-            {% if noticia.fonte_informacao in "http" %}
+            </p>
+            {% if "http" in noticia.fonte_informacao %}
             <a href="{{noticia.fonte_informacao}}" target="_blank" class=" text-decoration-none"><small
                     class="text-info">Fonte</small></a>
             {% else %}
