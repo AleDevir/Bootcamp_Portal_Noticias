@@ -10,7 +10,7 @@ from .models import Noticia, Categoria
 
 class RegistrarUsuarioForm(UserCreationForm):
     '''
-    Cria um Usuário
+    Formulário de cadastro de Usuário
     '''
     email = forms.EmailField(required=True)
     class Meta:
@@ -26,7 +26,13 @@ class NoticiaForm(forms.ModelForm):
         model = Noticia
         fields = ['titulo', 'subtitulo', 'conteudo', 'imagem', 'categoria', 'fonte_informacao']
 
-class CategoriForm(forms.ModelForm):
+class CategoriaForm(forms.ModelForm):
+    '''
+    Formulário de cadastro de categoria
+    '''
     class Meta:
+        '''
+        Metamodelo
+        '''
         model = Categoria
         fields = ['nome',  'imagem']

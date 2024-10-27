@@ -4,6 +4,10 @@ URLs Aplicação
 from django.urls import path
 from . import views
 from .views import (
+    CategoriasView,
+    CadastrarCategoriaView,
+    EditarCategoriaView,
+    ExcluirCategoriaView,
     HomeListView,
     NoticiaDetailView,
     NoticiaAdmDetailView,
@@ -32,4 +36,11 @@ urlpatterns = [
     path('adm/noticias/<int:pk>/cadastro/', EditarNoticiaView.as_view(), name='editar_noticia'),
     path('adm/noticias/<int:pk>/remove/', ExcluirNoticiaView.as_view(), name='excluir_noticia'),
     path('adm/noticias/<int:noticia_id>/publica/<int:publicado>', views.publicar_noticia, name='publicar-noticia'),
+
+
+    path('adm/categorias/', CategoriasView.as_view(), name='categorias'),
+    path('adm/categorias/cadastro/', CadastrarCategoriaView.as_view(), name='cadastrar_categoria'),
+    path('adm/categorias/<int:pk>/cadastro/', EditarCategoriaView.as_view(), name='editar_categoria'),
+    path('adm/categorias/<int:pk>/remove/', ExcluirCategoriaView.as_view(), name='excluir_categoria'),
+
 ]

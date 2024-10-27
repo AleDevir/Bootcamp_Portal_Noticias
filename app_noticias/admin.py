@@ -9,6 +9,19 @@ from .models import (
     Noticia
 )
 
+class CategoriaAdmin(admin.ModelAdmin):
+    '''
+    CategoriaAdmin
+    '''
+    list_display = [
+        'nome',
+        'imagem',
+    ]
+
+    search_fields = ['nome']
+
+
+
 class NoticiaAdmin(admin.ModelAdmin):
     '''
     NoticiaAdmin
@@ -34,7 +47,5 @@ class NoticiaAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Noticia, NoticiaAdmin)
+admin.site.register(Categoria, CategoriaAdmin)
 
-admin.site.register([
-    Categoria,
-])

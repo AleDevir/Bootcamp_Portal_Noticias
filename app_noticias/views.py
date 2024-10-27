@@ -20,7 +20,7 @@ from django.shortcuts import (
     HttpResponseRedirect,
 )
 from .models import  Noticia, Categoria
-from .forms import RegistrarUsuarioForm, NoticiaForm
+from .forms import RegistrarUsuarioForm, NoticiaForm, CategoriaForm
 
 def root(request) -> HttpResponse:
     '''
@@ -197,7 +197,6 @@ class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('noticias')
 
-
 class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     #Edita a notícia
     permission_required = "app_noticias.change_noticia"
@@ -262,3 +261,54 @@ def publicar_noticia(request, noticia_id: int, publicado: int) -> HttpResponse:
     noticia.save()
     return HttpResponseRedirect(reverse("noticias"))
 
+
+
+class CategoriasView(PermissionRequiredMixin, ListView):
+    '''
+    Visualiza a área administrativa de categorias
+    '''
+    model = Categoria
+    permission_required = "app_noticias.view_categoria"
+    context_object_name = 'categorias'
+    template_name = 'categorias_table.html'
+      
+    def get_success_url(self):
+        return reverse('categorias')
+    
+class CadastrarCategoriaView(PermissionRequiredMixin, CreateView):
+    '''
+    Visualiza o cadastro de categoria na área administrativa de categorias
+    '''
+    model = Categoria
+    form_class = CategoriaForm
+    permission_required = "app_noticias.add_categoria"
+    template_name = 'categoria_cadastro.html'
+
+    def get_success_url(self):
+        return reverse('categorias')
+    
+class EditarCategoriaView(PermissionRequiredMixin, UpdateView):
+    '''
+    Visualiza a edição de categoria na área administrativa de categorias
+    '''
+    model = Categoria
+    # form_class = CategoriaForm
+    fields = ['nome',  'imagem']
+    permission_required = "app_noticias.change_categoria"
+    template_name = 'categoria_cadastro.html'   
+
+    def get_success_url(self):
+        return reverse('categorias')
+    
+
+class ExcluirCategoriaView(PermissionRequiredMixin, DeleteView):
+    '''
+    Visualiza a decisão de deletar uma categoria na área administrativa de categorias
+    '''
+    model = Categoria
+    permission_required = "app_noticias.delete_categoria"
+    template_name = 'categoria_confirm_delete.html'
+    context_object_name = 'categoria'
+
+    def get_success_url(self):
+        return reverse('categorias')

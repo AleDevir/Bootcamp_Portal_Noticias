@@ -35,7 +35,7 @@
             <p>
                 {{ noticia.conteudo|safe|linebreaks }}
             </p><br>
-            {% if noticia.fonte_informacao|first in "http" %}
+            {% if noticia.fonte_informacao in "http" %}
             <a href="{{noticia.fonte_informacao}}" target="_blank" class=" text-decoration-none"><small
                     class="text-info">Fonte</small></a>
             {% else %}

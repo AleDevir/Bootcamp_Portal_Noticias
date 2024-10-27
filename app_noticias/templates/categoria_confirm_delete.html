@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+{% load static %}
+
+
+<div class="d-flex col  justify-content-center container" style="margin-top: 60px;">
+
+    <div class="mb-3">
+        <div class="d-flex justify-content-center">
+            <img src="/static/icones/atencao.png" width="45" height="45" />
+            <p class="text-danger fs-2 ms-2">Você está na área de exclusão de categoria</p>
+
+        </div>
+        <h5 class="card-title text-center mb-2 fs-3">Confirma a exclusão da categoria?</h5>
+        <p class="card-text text-center text-secondary fs-4">{{categoria.nome}}</p>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="d-flex justify-content-center">
+                <button value="Submit" class="btn btn-outline-danger mx-2" type="submit">Sim</button>
+                <a href="javascript:history.back()" class="  mx-2 text-decoration-none btn btn-outline-success">Não</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+{% endblock %}
