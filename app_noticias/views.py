@@ -133,7 +133,6 @@ class NoticiaBaseDetailView(DetailView):
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
-
 class NoticiaDetailView(NoticiaBaseDetailView):
     '''
     Detalhe da notícia no Portal de Notícias
@@ -153,7 +152,6 @@ class NoticiaAdmDetailView(PermissionRequiredMixin, NoticiaBaseDetailView):
     Detalhe da Notícia na Área Administrativa.
     '''
     permission_required = "app_noticias.view_noticia"
-
 
 class CriarUsuarioView(CreateView):
     '''
@@ -198,7 +196,8 @@ class CadastrarNoticiaView(PermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('noticias')
-    
+
+
 class EditarNoticiaView(PermissionRequiredMixin, UpdateView):
     #Edita a notícia
     permission_required = "app_noticias.change_noticia"
