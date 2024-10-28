@@ -21,18 +21,18 @@
 
 <body data-bs-theme="dark">
     <div class="sticky-top  bg-body border-bottom border-info">
-        <div class="  hstack d-flex justify-content-between">
+        <p class="w-100 text-info fs-3 text-center py-3" style="background-color: #4d6b8a;">
+            Portal de Notícias
+        </p>
+
+        <div class="  hstack d-flex ">
             <a href="{% url 'home' %}">
-                <div class="text-ligth m-3 p-2 rounded-circle btn btn-outline-info">PN</div>
+                <div class="text-ligth p-2 rounded-circle btn btn-outline-info"
+                    style="margin-left: 10px; margin-bottom: 10px;">PN</div>
             </a>
-            <div class="">
-                <p class=" text-info fs-3 " style="font-family: fantasy; text-shadow: #73cef0 1px 0 5px;">
-                    Portal de Notícias
-                </p>
-            </div>
 
             {% if request.user.is_authenticated %}
-            <div class="dropdown  px-4">
+            <div class="dropdown ms-auto" style="margin-right: 10px; margin-bottom: 10px;">
                 <button class="btn btn-outline-info dropdown-toggle  " type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Olá, {{ user.get_username }}
