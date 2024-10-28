@@ -1,6 +1,7 @@
 Django
 django-test
 django-bootstrap5
+django-crispy-forms
 pylint-django
 mypy
 mypy-extensions
