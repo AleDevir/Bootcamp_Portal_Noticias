@@ -360,6 +360,7 @@ class UserActionView(PermissionRequiredMixin, ListView):
     permission_required = "app_noticias.view_useraction"
     context_object_name = 'actions'
     template_name = 'useractions_table.html'
+    paginate_by = 20
 
     def get_queryset(self):
         return UserAction.objects.all().order_by('-timestamp')
