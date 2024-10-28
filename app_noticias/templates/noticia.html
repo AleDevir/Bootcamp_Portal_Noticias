@@ -22,9 +22,10 @@
                 {% else %}
                 <p class="text-secondary">Atualizado há {{noticia.atualizacao_tempo}}</p>
                 {% endif %}
-                {% for cate in noticia.categoria.all %}
-                <p class="text-secondary">Em {{cate.nome}}</p>
-                {% endfor %}
+
+                <p class="text-secondary">Em {% for cate in noticia.categoria.all %}{{cate.nome}}
+                    {% if not forloop.last %} e {% endif %}{% endfor %}
+                </p>
             </div>
         </div>
 
@@ -42,6 +43,15 @@
             <p class="text-secondary"><small>Fonte: {{noticia.fonte_informacao}}</small></p> </small>
             {% endif %}
         </div>
+    </div>
+
+    <div style="margin-top: 60px; padding: 0; margin-left: 35px;">
+        <div class="justify-content-center row mt-3">
+            <div class="col-8 mt-3 mb-3">
+                {% include "noticia_card.html" %}
+            </div>
+        </div>
+
     </div>
 </div>
 

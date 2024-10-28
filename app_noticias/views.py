@@ -115,10 +115,17 @@ class NoticiasView(PermissionRequiredMixin, NoticiasBaseListView):
 
 class NoticiaBaseDetailView(DetailView):
     '''
-    Classe Base dos detalhes da notícia
+    Classe Base dos detalhes de uma notícia
     '''
     model = Noticia
     template_name = 'noticia.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ids_das_categorias = [categoria.id for categoria in self.object.categoria.all()]
+        noticias_relacionadas = Noticia.objects.filter(categoria__in=ids_das_categorias).exclude(id=self.object.id).order_by('-publicada_em')
+        context['noticias'] = noticias_relacionadas
+        return context
 
     def acrescentar_visualizacao(self, noticia_id: int = 0) -> None:
         '''
