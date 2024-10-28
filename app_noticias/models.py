@@ -55,6 +55,13 @@ class Noticia(models.Model):
 
     publicacao_tempo = property(_calcular_tempo_da_publicacao)
 
+    def _paragrafos(self) -> list[str]:
+        '''
+        Transforma o conteúdo da notícia em parágrafos.
+        '''
+        return self.conteudo.split('\n')
+
+    paragrafos = property(_paragrafos)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.titulo)

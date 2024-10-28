@@ -4,9 +4,22 @@
 {% block content %}
 {% static 'media' as media_url %}
 
-<a href="javascript:history.back()" class="mb-3 mt-5 ms-3 text-decoration-none btn btn-outline-info">Voltar</a>
 
 <div class=" p-5 ">
+    <div class="d-flex justify-content-center p-3 text-info">
+        <a href="https://www.whatsapp.com/?lang=pt_BR" target="_blank">
+            <img src="{% static 'icones/whatsapp.png' %}" alt="logo" width="50" class="px-3" style="color: aqua;">
+        </a>
+        <a href="https://www.instagram.com/" target="_blank">
+            <img src="{% static 'icones/instagram.png' %}" alt="logo" width="50" class="px-3" style="color: aqua;">
+        </a>
+        <a href="https://web.facebook.com/?locale=pt_BR&_rdc=1&_rdr" target="_blank">
+            <img src="{% static 'icones/facebook.png' %}" alt="logo" width="50" class="px-3" style="color: aqua;">
+        </a>
+        <a href="https://x.com/?lang=pt-br" target="_blank">
+            <img src="{% static 'icones/x.png' %}" alt="logo" width="50" class="px-3" style="color: aqua;">
+        </a>
+    </div>
 
     <div class="d-flex  justify-content-center ">
         <div class="d-flex flex-column" style="width: 540px;">
@@ -16,16 +29,22 @@
             <div>
                 <p class="text-secondary">Por {{noticia.autor}}</p>
                 {% if noticia.publicada %}
-                <p class="text-secondary">Publicada {{noticia.publicada_em}} - Atualizado há
-                    {{noticia.atualizacao_tempo}}
-                </p>
+                <small>
+                    <p class="text-secondary">Publicada {{noticia.publicada_em}} - Atualizado há
+                        {{noticia.atualizacao_tempo}}
+                    </p>
+                </small>
                 {% else %}
-                <p class="text-secondary">Atualizado há {{noticia.atualizacao_tempo}}</p>
-                {% endif %}
+                <small>
+                    <p class="text-secondary">Atualizado há {{noticia.atualizacao_tempo}}</p>
+                    {% endif %}
+                </small>
+                <small>
+                    <p class="text-secondary">Em {% for cate in noticia.categoria.all %}{{cate.nome}}
+                        {% if not forloop.last %} e {% endif %}{% endfor %}
+                    </p>
+                </small>
 
-                <p class="text-secondary">Em {% for cate in noticia.categoria.all %}{{cate.nome}}
-                    {% if not forloop.last %} e {% endif %}{% endfor %}
-                </p>
             </div>
         </div>
 
@@ -33,9 +52,11 @@
     <div class="d-flex text-center justify-content-center text-wrap" style="padding: 40px; ">
         <div class="fs-5" style="max-width: 680px; text-align: justify;">
             <p class="text-info fs-3">{{noticia.titulo}}</p>
-            <p>
-                {{ noticia.conteudo|safe|linebreaks }}
+            {% for paragrafo in noticia.paragrafos %}
+            <p style="text-indent: 5%;">
+                {{ paragrafo|safe }}
             </p>
+            {% endfor %}
             {% if "http" in noticia.fonte_informacao %}
             <a href="{{noticia.fonte_informacao}}" target="_blank" class=" text-decoration-none"><small
                     class="text-info">Fonte</small></a>
@@ -54,5 +75,6 @@
 
     </div>
 </div>
+<a href="javascript:history.back()" class="mb-3 mt-5 ms-3 text-decoration-none btn btn-outline-info">Voltar</a>
 
 {% endblock %}
