@@ -19,14 +19,20 @@
     {% bootstrap_javascript %}
 </head>
 
-<body class="bg-body-primary " data-bs-theme="dark">
+<body data-bs-theme="dark">
     <div class="sticky-top  bg-body border-bottom border-info">
-        <div class="  hstack d-flex">
+        <div class="  hstack d-flex justify-content-between">
             <a href="{% url 'home' %}">
                 <div class="text-ligth m-3 p-2 rounded-circle btn btn-outline-info">PN</div>
             </a>
+            <div class="">
+                <p class=" text-info fs-3 " style="font-family: fantasy; text-shadow: #73cef0 1px 0 5px;">
+                    Portal de Notícias
+                </p>
+            </div>
+
             {% if request.user.is_authenticated %}
-            <div class="dropdown ms-auto px-4">
+            <div class="dropdown  px-4">
                 <button class="btn btn-outline-info dropdown-toggle  " type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     Olá, {{ user.get_username }}
