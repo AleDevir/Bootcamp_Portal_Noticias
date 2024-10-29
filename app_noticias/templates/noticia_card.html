@@ -10,22 +10,23 @@
             <img src="{{media_url}}/{{uma_noticia.imagem}}" alt="{{uma_noticia.titulo}}" class="w-100 rounded">
         </div>
         <div class="col">
-            <p class="ms-4 fs-4 text-light ">{{uma_noticia.titulo}}</p>
-            <p class="ms-4  fs-6 text-info ">{{uma_noticia.subtitulo}}</p>
+            <p class="ms-4 responsive text-light ">{{uma_noticia.titulo}}</p>
+            <p class="ms-4  responsive text-info ">{{uma_noticia.subtitulo}}</p>
             {% if uma_noticia.publicacao_tempo == 'agora' %}
-            <p class="ms-4 fs-6 text-secondary text-capitalize"><small>{{uma_noticia.publicacao_tempo}}</small></p>
+            <p class="ms-4 responsive text-secondary text-capitalize"><small>{{uma_noticia.publicacao_tempo}}</small>
+            </p>
             {% else %}
-            <p class="ms-4 fs-6 text-secondary"><small>Há {{uma_noticia.publicacao_tempo}}</small></p>
+            <p class="ms-4 responsive text-secondary"><small>Há {{uma_noticia.publicacao_tempo}}</small></p>
 
             {% if uma_noticia.num_visualizacoes == 0 %}
-            <p class="ms-4 fs-6 text-secondary"><small>Não lida</small></p>
+            <p class="ms-4 responsive text-secondary"><small>Não lida</small></p>
             {% else %}
-            <p class="ms-4 fs-6 text-secondary"><small>{{ uma_noticia.num_visualizacoes }}
+            <p class="ms-4 responsive text-secondary"><small>{{ uma_noticia.num_visualizacoes }}
                     letura{{ uma_noticia.num_visualizacoes|pluralize }}</small></p>
             {% endif %}
 
             {% endif %}
-            <p class="ms-4 text-info "><small class="text-body-secondary">
+            <p class="ms-4 text-info responsive"><small class="text-body-secondary">
                     {% for categoria in uma_noticia.categorias.all %}
                     {{categoria.nome}}<br />
                     {% endfor %}

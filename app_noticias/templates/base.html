@@ -7,12 +7,15 @@
 {% static 'icones/logout.png' as logout_url %}
 {% static 'icones/log.png' as log_url %}
 {% static 'icones/categoria.png' as categoria_url %}
+{% static 'css.css' as css_url %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{css_url}}">
+
     <title>Portal de Notícias</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
@@ -86,7 +89,7 @@
         </div>
 
     </div>
-    <div>
+    <div class="responsive">
         {% block content %}{% endblock %}
     </div>
 

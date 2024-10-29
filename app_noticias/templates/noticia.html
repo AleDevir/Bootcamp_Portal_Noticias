@@ -27,20 +27,20 @@
                 <img src="{{media_url}}/{{noticia.imagem}}" class="rounded w-100" alt="{{noticia.titulo}}">
             </div>
             <div>
-                <p class="text-secondary">Por {{noticia.autor}}</p>
+                <p class="text-secondary responsive">Por {{noticia.autor}}</p>
                 {% if noticia.publicada %}
                 <small>
-                    <p class="text-secondary">Publicada {{noticia.publicada_em}} - Atualizado há
+                    <p class="text-secondary responsive">Publicada {{noticia.publicada_em}} - Atualizado há
                         {{noticia.atualizacao_tempo}}
                     </p>
                 </small>
                 {% else %}
                 <small>
-                    <p class="text-secondary">Atualizado há {{noticia.atualizacao_tempo}}</p>
+                    <p class="text-secondary responsive">Atualizado há {{noticia.atualizacao_tempo}}</p>
                     {% endif %}
                 </small>
                 <small>
-                    <p class="text-secondary">Em {% for cate in noticia.categoria.all %}{{cate.nome}}
+                    <p class="text-secondary responsive">Em {% for cate in noticia.categoria.all %}{{cate.nome}}
                         {% if not forloop.last %} e {% endif %}{% endfor %}
                     </p>
                 </small>
@@ -49,37 +49,41 @@
         </div>
 
     </div>
-    <div class="d-flex text-center justify-content-center text-wrap" style="padding: 40px; ">
-        <div class="fs-5" style="max-width: 680px; text-align: justify;">
-            <p class="text-info fs-3">{{noticia.titulo}}</p>
+    <div class="d-flex justify-content-center text-wrap">
+        <div class=" responsive" style=" text-align: justify;">
+            <p class="text-info  responsive">{{noticia.titulo}}</p>
             {% for paragrafo in noticia.paragrafos %}
-            <p style="text-indent: 5%;">
-                {{ paragrafo|safe }}
-            </p>
+            <small>
+                <p style="text-indent: 5%;" class="responsive">
+                    {{ paragrafo|safe }}
+                </p>
+            </small>
+
             {% endfor %}
             {% if "http" in noticia.fonte_informacao %}
             <a href="{{noticia.fonte_informacao}}" target="_blank" class=" text-decoration-none"><small
-                    class="text-info">Fonte</small></a>
+                    class="text-info responsive">Fonte</small></a>
             {% else %}
-            <p class="text-secondary"><small>Fonte: {{noticia.fonte_informacao}}</small></p> </small>
+            <p class="text-secondary responsive"><small>Fonte: {{noticia.fonte_informacao}}</small></p> </small>
             {% endif %}
         </div>
     </div>
 
 
 
-    <div style="margin-top: 60px; padding: 0; margin-left: 35px;">
+    <div style="margin-top: 60px; padding: 0;">
 
         <div class="justify-content-center row mt-3">
 
-            <div class="col-8 mt-3 mb-3  rounded" style="background-color: #343638; padding: 20px;">
-                <p class="text-info fs-3" style="margin-bottom: 40px;">Mais do Portal Notícias </p>
+            <div class=" mt-3 mb-3  rounded" style="background-color: #343638; padding: 20px;">
+                <p class="text-info fs-3 responsive" style="margin-bottom: 40px;">Mais do Portal Notícias </p>
                 {% include "noticia_card.html" %}
             </div>
         </div>
 
     </div>
 </div>
-<a href="javascript:history.back()" class="mb-3 mt-5 ms-3 text-decoration-none btn btn-outline-info">Voltar</a>
+<a href="javascript:history.back()"
+    class="mb-3 mt-5 ms-3 text-decoration-none btn btn-outline-info responsive">Voltar</a>
 
 {% endblock %}
