@@ -123,7 +123,7 @@ class NoticiaBaseDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         ids_das_categorias = [categoria.id for categoria in self.object.categoria.all()]
-        noticias_relacionadas = Noticia.objects.filter(categoria__in=ids_das_categorias).exclude(id=self.object.id).distinct().order_by('-publicada_em')
+        noticias_relacionadas = Noticia.objects.filter(categoria__in=ids_das_categorias,publicada=True).exclude(id=self.object.id).distinct().order_by('-publicada_em')
         context['noticias'] = noticias_relacionadas
         return context
 
