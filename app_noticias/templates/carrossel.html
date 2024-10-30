@@ -6,13 +6,8 @@
 <div class=" shadow-lg w-100 justify-content-center d-flex " style=" height: 300px;">
     <div id="carouselExampleControls" data-bs-ride="carousel" class="carousel slide w-50 p-4 ">
         <div class="carousel-inner rounded" style=" height: 250px; ">
+            {% if categoria_pesquisada == 0 %}
             {% for uma_categoria in categorias %}
-            {% if categoria_pesquisada == uma_categoria.id %}
-            <div class="ratio ratio-21x9" style="object-fit: contain;">
-                <img src="{{media_url}}/{{uma_categoria.imagem}}" alt="{{uma_categoria.nome}}" class="d-block w-100">
-                <p class=" fs-3 text-center p-2">Notícias sobre {{uma_categoria.nome}}</p>
-            </div>
-            {% else %}
             <a href="{% url 'home' %}?categoria={{uma_categoria.id}}" class="text-decoration-none text-light">
                 <div class="carousel-item active ratio ratio-21x9" style="object-fit: contain;">
                     <img src="{{media_url}}/{{uma_categoria.imagem}}" alt="{{uma_categoria.nome}}"
@@ -20,8 +15,17 @@
                     <p class=" fs-3 text-center p-2">Notícias sobre {{uma_categoria.nome}}</p>
                 </div>
             </a>
+            {% endfor %}
+            {% else %}
+            {% for uma_categoria in categorias %}
+            {% if categoria_pesquisada == uma_categoria.id %}
+            <div class="ratio ratio-21x9" style="object-fit: contain;">
+                <img src="{{media_url}}/{{uma_categoria.imagem}}" alt="{{uma_categoria.nome}}" class="d-block w-100">
+                <p class=" fs-3 text-center p-2">Notícias sobre {{uma_categoria.nome}}</p>
+            </div>
             {% endif %}
             {% endfor %}
+            {% endif %}
         </div>
         {% if categoria_pesquisada == 0 %}
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
