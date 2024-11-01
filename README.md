@@ -30,8 +30,8 @@ pip install -r requirements.txt
 ```
 
 # Distribuição e status de completude das atividades:
+![image](https://github.com/user-attachments/assets/893befbe-4a94-47e8-ac64-c0265a990ec4)
 
-![image](https://github.com/user-attachments/assets/3fb2f79d-7f03-4482-a23c-a660a567b99a)
 
 
 
