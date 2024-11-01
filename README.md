@@ -28,3 +28,9 @@ Comando para instalação dos pacotes:
 pip install -r requirements.txt 
 
 ```
+
+# Distribuição e status de completude das atividades:
+
+![image](https://github.com/user-attachments/assets/067ecb14-0c52-484e-a9f6-569351f2d064)
+
+
